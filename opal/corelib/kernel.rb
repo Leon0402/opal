@@ -747,6 +747,8 @@ module ::Kernel
   alias send __send__
   alias then yield_self
   alias to_enum enum_for
+
+  ::Opal.pristine(self, :method_missing)
 end
 
 class ::Object

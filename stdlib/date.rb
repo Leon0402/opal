@@ -462,6 +462,14 @@ class Date
     }
   end
 
+  def sunday?
+    wday == 0
+  end
+
+  def thursday?
+    wday == 4
+  end
+
   def to_s
     %x{
       var d = #{@date}, year = d.getFullYear(), month = d.getMonth() + 1, day = d.getDate();

@@ -396,6 +396,26 @@ class ::Time < `Date`
     end
   end
 
+  def min
+    `self.is_utc ? self.getUTCMinutes() : self.getMinutes()`
+  end
+
+  def mon
+    `(self.is_utc ? self.getUTCMonth() : self.getMonth()) + 1`
+  end
+
+  def monday?
+    `#{wday} == 1`
+  end
+
+  def saturday?
+    `#{wday} == 6`
+  end
+
+  def sec
+    `self.is_utc ? self.getUTCSeconds() : self.getSeconds()`
+  end
+
   def succ
     %x{
       var result = new Date(self.getTime() + 1000);
@@ -727,6 +747,23 @@ class ::Time < `Date`
 
   def to_i
     `parseInt(self.getTime() / 1000, 10)`
+  end
+
+  def tuesday?
+    `#{wday} == 2`
+  end
+
+
+  def wday
+    `self.is_utc ? self.getUTCDay() : self.getDay()`
+  end
+
+  def wednesday?
+    `#{wday} == 3`
+  end
+
+  def year
+    `self.is_utc ? self.getUTCFullYear() : self.getFullYear()`
   end
 
   def cweek_cyear
