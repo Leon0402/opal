@@ -196,6 +196,10 @@ module Opal
     # # await: *await*, sleep, gets
     compiler_option :await, default: false, as: :async_await, magic_comment: true
 
+    compiler_option :allowed_method_defs, default: nil
+
+    attr_reader :dead_methods_removed
+
     # @return [String] The compiled ruby code
     attr_reader :result
 
@@ -234,6 +238,7 @@ module Opal
       @option_values = {}
       @magic_comments = {}
       @dynamic_cache_result = false
+      @dead_methods_removed = Set.new
     end
 
     # Compile some ruby code to a string.

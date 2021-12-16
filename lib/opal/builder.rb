@@ -95,6 +95,31 @@ module Opal
 
     def build_str(source, rel_path, options = {})
       return if source.nil?
+
+      $stderr.puts "_____method_elimination: #{options[:dead_method_elimination]} [#{rel_path} - #{object_id}]"
+      options[:dead_method_elimination] ||= ENV['DCE'].to_i
+      options[:allowed_method_defs] ||= []
+      $stderr.puts "dead_method_elimination: #{options[:dead_method_elimination]}"
+      while options[:dead_method_elimination] > 0
+
+        options[:dead_method_elimination] -= 1
+        allowed_method_defs = []
+
+        dup.build_str(source, rel_path, options).processed.each do |asset|
+          # p [asset.class, asset.filename] => asset.method_calls.to_a.sort
+          $stderr.puts "method_calls: #{asset.method_calls.to_a.sort}"
+          allowed_method_defs.push(*asset.method_calls)
+        end
+        allowed_method_defs.uniq!
+
+        options[:allowed_method_defs] = allowed_method_defs
+        $stderr.puts "allowed_method_defs: #{allowed_method_defs.sort}"
+
+        # p :allowed_method_defs
+        # puts options[:allowed_method_defs].to_a.sort
+        # exit 1
+      end
+
       abs_path = expand_path(rel_path)
       rel_path = expand_ext(rel_path)
       asset = processor_for(source, rel_path, abs_path, false, options)
